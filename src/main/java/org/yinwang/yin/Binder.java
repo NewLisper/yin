@@ -18,7 +18,7 @@ public class Binder {
             String id = ((Name) pattern).id;
             Value v = env.lookupLocal(id);
             if (v != null) {
-                _.abort(pattern, "trying to redefine name: " + id);
+                Util.abort(pattern, "trying to redefine name: " + id);
             } else {
                 env.putValue(id, value);
             }
@@ -31,11 +31,11 @@ public class Binder {
                         define(elms1.get(k1), elms2.lookupLocal(k1), env);
                     }
                 } else {
-                    _.abort(pattern, "define with records of different attributes: " +
+                    Util.abort(pattern, "define with records of different attributes: " +
                             elms1.keySet() + " v.s. " + elms2.keySet());
                 }
             } else {
-                _.abort(pattern, "define with incompatible types: record and " + value);
+                Util.abort(pattern, "define with incompatible types: record and " + value);
             }
         } else if (pattern instanceof VectorLiteral) {
             if (value instanceof Vector) {
@@ -46,14 +46,14 @@ public class Binder {
                         define(elms1.get(i), elms2.get(i), env);
                     }
                 } else {
-                    _.abort(pattern,
+                    Util.abort(pattern,
                             "define with vectors of different sizes: " + elms1.size() + " v.s. " + elms2.size());
                 }
             } else {
-                _.abort(pattern, "define with incompatible types: vector and " + value);
+                Util.abort(pattern, "define with incompatible types: vector and " + value);
             }
         } else {
-            _.abort(pattern, "unsupported pattern of define: " + pattern);
+            Util.abort(pattern, "unsupported pattern of define: " + pattern);
         }
     }
 
@@ -64,7 +64,7 @@ public class Binder {
             Scope d = env.findDefiningScope(id);
 
             if (d == null) {
-                _.abort(pattern, "assigned name was not defined: " + id);
+                Util.abort(pattern, "assigned name was not defined: " + id);
             } else {
                 d.putValue(id, value);
             }
@@ -81,11 +81,11 @@ public class Binder {
                         assign(elms1.get(k1), elms2.lookupLocal(k1), env);
                     }
                 } else {
-                    _.abort(pattern, "assign with records of different attributes: " +
+                    Util.abort(pattern, "assign with records of different attributes: " +
                             elms1.keySet() + " v.s. " + elms2.keySet());
                 }
             } else {
-                _.abort(pattern, "assign with incompatible types: record and " + value);
+                Util.abort(pattern, "assign with incompatible types: record and " + value);
             }
         } else if (pattern instanceof VectorLiteral) {
             if (value instanceof Vector) {
@@ -96,13 +96,13 @@ public class Binder {
                         assign(elms1.get(i), elms2.get(i), env);
                     }
                 } else {
-                    _.abort(pattern, "assign vectors of different sizes: " + elms1.size() + " v.s. " + elms2.size());
+                    Util.abort(pattern, "assign vectors of different sizes: " + elms1.size() + " v.s. " + elms2.size());
                 }
             } else {
-                _.abort(pattern, "assign incompatible types: vector and " + value);
+                Util.abort(pattern, "assign incompatible types: vector and " + value);
             }
         } else {
-            _.abort(pattern, "unsupported pattern of assign: " + pattern);
+            Util.abort(pattern, "unsupported pattern of assign: " + pattern);
         }
     }
 
@@ -117,7 +117,7 @@ public class Binder {
         if (pattern instanceof Name) {
             String id = ((Name) pattern).id;
             if (seen.contains(id)) {
-                _.abort(pattern, "duplicated name found in pattern: " + pattern);
+                Util.abort(pattern, "duplicated name found in pattern: " + pattern);
             } else {
                 seen.add(id);
             }

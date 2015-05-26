@@ -2,7 +2,7 @@ package org.yinwang.yin.ast;
 
 import org.yinwang.yin.Constants;
 import org.yinwang.yin.Scope;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.Value;
 
 import java.util.Map;
@@ -41,7 +41,7 @@ public class Declare extends Node {
                     s.putValue(key, (Value) defaultValue);
                 }
             } else {
-                _.abort("default value is not a value, shouldn't happen");
+                Util.abort("default value is not a value, shouldn't happen");
             }
         }
     }
@@ -61,7 +61,7 @@ public class Declare extends Node {
                     s.putValue(key, (Value) type);
                 }
             } else {
-                _.abort("illegal type, shouldn't happen" + type);
+                Util.abort("illegal type, shouldn't happen" + type);
             }
         }
     }
@@ -78,7 +78,7 @@ public class Declare extends Node {
                     Value vValue = ((Node) v).interp(s);
                     evaled.put(field, e.getKey(), vValue);
                 } else {
-                    _.abort("property is not a node, parser bug: " + v);
+                    Util.abort("property is not a node, parser bug: " + v);
                 }
             }
         }
@@ -100,7 +100,7 @@ public class Declare extends Node {
                         Value vValue = ((Node) v).typecheck(s);
                         evaled.put(field, e.getKey(), vValue);
                     } else {
-                        _.abort("property is not a node, parser bug: " + v);
+                        Util.abort("property is not a node, parser bug: " + v);
                     }
                 }
             }
@@ -111,7 +111,7 @@ public class Declare extends Node {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Constants.TUPLE_BEGIN);
+        sb.append(Constants.PAREN_BEGIN);
         sb.append(Constants.DECLARE_KEYWORD).append(" ");
 
         for (String field : propertyForm.keySet()) {
@@ -121,7 +121,7 @@ public class Declare extends Node {
             }
         }
 
-        sb.append(Constants.TUPLE_END);
+        sb.append(Constants.PAREN_END);
         return sb.toString();
     }
 }

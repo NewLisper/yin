@@ -1,7 +1,7 @@
 package org.yinwang.yin.ast;
 
 
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ public class Argument {
         }
 
         if (hasName && hasKeyword) {
-            _.abort(elements.get(0), "mix positional and keyword arguments not allowed: " + elements);
+            Util.abort(elements.get(0), "mix positional and keyword arguments not allowed: " + elements);
         }
 
 
@@ -41,14 +41,14 @@ public class Argument {
                 positional.add(((Keyword) key).asName());
 
                 if (i >= elements.size() - 1) {
-                    _.abort(key, "missing value for keyword: " + key);
+                    Util.abort(key, "missing value for keyword: " + key);
                 } else {
                     Node value = elements.get(i + 1);
                     if (value instanceof Keyword) {
-                        _.abort(value, "keywords can't be used as values: " + value);
+                        Util.abort(value, "keywords can't be used as values: " + value);
                     } else {
                         if (keywords.containsKey(id)) {
-                            _.abort(key, "duplicated keyword: " + key);
+                            Util.abort(key, "duplicated keyword: " + key);
                         }
                         keywords.put(id, value);
                         i++;

@@ -4,7 +4,7 @@ package org.yinwang.yin.ast;
 import org.yinwang.yin.Constants;
 import org.yinwang.yin.Scope;
 import org.yinwang.yin.TypeChecker;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.*;
 
 import java.util.*;
@@ -63,7 +63,7 @@ public class Call extends Node {
             List<Value> args = Node.interpList(this.args.positional, s);
             return prim.apply(args, this);
         } else {  // can't happen
-            _.abort(this.op, "calling non-function: " + opv);
+            Util.abort(this.op, "calling non-function: " + opv);
             return Value.VOID;
         }
     }
@@ -87,7 +87,7 @@ public class Call extends Node {
             if (!args.positional.isEmpty() && args.keywords.isEmpty()) {
                 // positional
                 if (args.positional.size() != params.size()) {
-                    _.abort(this.op,
+                    Util.abort(this.op,
                             "calling function with wrong number of arguments. expected: " + params.size()
                                     + " actual: " + args.positional.size());
                 }
@@ -96,7 +96,7 @@ public class Call extends Node {
                     Value value = args.positional.get(i).typecheck(s);
                     Value expected = funScope.lookup(params.get(i).id);
                     if (!Type.subtype(value, expected, false)) {
-                        _.abort(args.positional.get(i), "type error. expected: " + expected + ", actual: " + value);
+                        Util.abort(args.positional.get(i), "type error. expected: " + expected + ", actual: " + value);
                     }
                     funScope.putValue(params.get(i).id, value);
                 }
@@ -112,11 +112,11 @@ public class Call extends Node {
                         Value value = actual.typecheck(funScope);
                         Value expected = funScope.lookup(param.id);
                         if (!Type.subtype(value, expected, false)) {
-                            _.abort(actual, "type error. expected: " + expected + ", actual: " + value);
+                            Util.abort(actual, "type error. expected: " + expected + ", actual: " + value);
                         }
                         funScope.putValue(param.id, value);
                     } else {
-                        _.abort(this, "argument not supplied for: " + param);
+                        Util.abort(this, "argument not supplied for: " + param);
                         return Value.VOID;
                     }
                 }
@@ -130,7 +130,7 @@ public class Call extends Node {
                 }
 
                 if (!extra.isEmpty()) {
-                    _.abort(this, "extra keyword arguments: " + extra);
+                    Util.abort(this, "extra keyword arguments: " + extra);
                     return Value.VOID;
                 }
             }
@@ -141,12 +141,12 @@ public class Call extends Node {
                     // evaluate the return type because it might be (typeof x)
                     return ((Node) retType).typecheck(funScope);
                 } else {
-                    _.abort("illegal return type: " + retType);
+                    Util.abort("illegal return type: " + retType);
                     return null;
                 }
             } else {
                 if (TypeChecker.self.callStack.contains(fun)) {
-                    _.abort(op, "You must specify return type for recursive functions: " + op);
+                    Util.abort(op, "You must specify return type for recursive functions: " + op);
                     return null;
                 }
 
@@ -165,13 +165,13 @@ public class Call extends Node {
             // set actual values, overwrite defaults if any
             for (Map.Entry<String, Node> e : args.keywords.entrySet()) {
                 if (!template.properties.keySet().contains(e.getKey())) {
-                    _.abort(this, "extra keyword argument: " + e.getKey());
+                    Util.abort(this, "extra keyword argument: " + e.getKey());
                 }
 
                 Value actual = args.keywords.get(e.getKey()).typecheck(s);
                 Value expected = template.properties.lookupLocalType(e.getKey());
                 if (!Type.subtype(actual, expected, false)) {
-                    _.abort(this, "type error. expected: " + expected + ", actual: " + actual);
+                    Util.abort(this, "type error. expected: " + expected + ", actual: " + actual);
                 }
                 values.putValue(e.getKey(), e.getValue().typecheck(s));
             }
@@ -179,7 +179,7 @@ public class Call extends Node {
             // check uninitialized fields
             for (String field : template.properties.keySet()) {
                 if (values.lookupLocal(field) == null) {
-                    _.abort(this, "field is not initialized: " + field);
+                    Util.abort(this, "field is not initialized: " + field);
                 }
             }
 
@@ -188,7 +188,7 @@ public class Call extends Node {
         } else if (fun instanceof PrimFun) {
             PrimFun prim = (PrimFun) fun;
             if (prim.arity >= 0 && args.positional.size() != prim.arity) {
-                _.abort(this, "incorrect number of arguments for primitive " +
+                Util.abort(this, "incorrect number of arguments for primitive " +
                         prim.name + ", expecting " + prim.arity + ", but got " + args.positional.size());
                 return null;
             } else {
@@ -196,7 +196,7 @@ public class Call extends Node {
                 return prim.typecheck(args, this);
             }
         } else {
-            _.abort(this.op, "calling non-function: " + fun);
+            Util.abort(this.op, "calling non-function: " + fun);
             return Value.VOID;
         }
 

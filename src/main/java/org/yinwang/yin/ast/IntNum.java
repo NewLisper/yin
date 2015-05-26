@@ -35,9 +35,6 @@ public class IntNum extends Node {
         } else if (content.startsWith("0x")) {
             base = 16;
             content = content.substring(2);
-        } else if (content.startsWith("0o")) {
-            base = 8;
-            content = content.substring(2);
         } else {
             base = 10;
         }

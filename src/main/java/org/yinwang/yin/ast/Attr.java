@@ -2,7 +2,7 @@ package org.yinwang.yin.ast;
 
 
 import org.yinwang.yin.Scope;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.RecordType;
 import org.yinwang.yin.value.RecordValue;
 import org.yinwang.yin.value.Value;
@@ -27,11 +27,11 @@ public class Attr extends Node {
             if (a != null) {
                 return a;
             } else {
-                _.abort(attr, "attribute " + attr + " not found in record: " + record);
+                Util.abort(attr, "attribute " + attr + " not found in record: " + record);
                 return null;
             }
         } else {
-            _.abort(attr, "getting attribute of non-record: " + record);
+            Util.abort(attr, "getting attribute of non-record: " + record);
             return null;
         }
     }
@@ -45,11 +45,11 @@ public class Attr extends Node {
             if (a != null) {
                 return a;
             } else {
-                _.abort(attr, "attribute " + attr + " not found in record: " + record);
+                Util.abort(attr, "attribute " + attr + " not found in record: " + record);
                 return null;
             }
         } else {
-            _.abort(attr, "getting attribute of non-record: " + record);
+            Util.abort(attr, "getting attribute of non-record: " + record);
             return null;
         }
     }
@@ -62,10 +62,11 @@ public class Attr extends Node {
             if (a != null) {
                 ((RecordType) record).properties.putValue(attr.id, v);
             } else {
-                _.abort(attr, "can only assign to existing attribute in record, " + attr + " not found in: " + record);
+                Util.abort(attr,
+                        "can only assign to existing attribute in record, " + attr + " not found in: " + record);
             }
         } else {
-            _.abort(attr, "setting attribute of non-record: " + record);
+            Util.abort(attr, "setting attribute of non-record: " + record);
         }
     }
 
