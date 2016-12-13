@@ -4,6 +4,7 @@ package org.yinwang.yin;
 import org.yinwang.yin.ast.Declare;
 import org.yinwang.yin.ast.Node;
 import org.yinwang.yin.parser.Parser;
+import org.yinwang.yin.parser.ParserException;
 import org.yinwang.yin.value.FunType;
 import org.yinwang.yin.value.Type;
 import org.yinwang.yin.value.Value;
@@ -27,7 +28,13 @@ public class TypeChecker {
 
 
     public Value typecheck(String file) {
-        Node program = Parser.parse(file);
+        Node program;
+        try {
+            program = Parser.parse(file);
+        } catch (ParserException e) {
+            Util.abort("parsing error: " + e);
+            return null;
+        }
         Scope s = Scope.buildInitTypeScope();
         Value ret = program.typecheck(s);
 
@@ -56,13 +63,13 @@ public class TypeChecker {
         Object retNode = fun.properties.lookupPropertyLocal(Constants.RETURN_ARROW, "type");
 
         if (retNode == null || !(retNode instanceof Node)) {
-            _.abort("illegal return type: " + retNode);
+            Util.abort("illegal return type: " + retNode);
             return;
         }
 
         Value expected = ((Node) retNode).typecheck(funScope);
         if (!Type.subtype(actual, expected, true)) {
-            _.abort(fun.fun, "type error in return value, expected: " + expected + ", actual: " + actual);
+            Util.abort(fun.fun, "type error in return value, expected: " + expected + ", actual: " + actual);
         }
     }
 
@@ -71,7 +78,7 @@ public class TypeChecker {
         TypeChecker tc = new TypeChecker(args[0]);
         TypeChecker.self = tc;
         Value result = tc.typecheck(args[0]);
-        _.msg(result.toString());
+        Util.msg(result.toString());
     }
 
 }

@@ -1,0 +1,20 @@
+(define even
+  (fun ([x Int] [-> Bool])
+    (if (= x 0)
+        true
+        (if (= x 1)
+            false
+            (odd (- x 1))))))
+
+(define odd
+  (fun ([x Int] [-> Bool])
+    (if (= x 0)
+        false
+        (if (= x 1)
+            true
+            (even (- x 1))))))
+
+(print (even 10))                       -- true
+(print (even 11))                       -- false
+(print (odd 10))                        -- false
+(print (odd 11))                        -- true

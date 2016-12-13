@@ -23,8 +23,6 @@
 
 -- (define even
 --   (fun ([x Int] [-> Bool])
---     (define f (fun ([x Int] [-> (U Int Bool)]) (if true 1 false)))
---     (f "ok")
 --     (if (= x 0)
 --         true
 --         (if (= x 1)
@@ -39,16 +37,25 @@
 --             true
 --             (even (- x 1))))))
 
+
+(define listof
+  (fun (T)
+    (U Nil
+       (record Pair
+         [head T]
+         [tail (listof T)]))))
+
+
 (record A
-  [x Int]
+  [x Any]
   [y String])
 
--- (define o (A :x 1 :y "hi"))
 
--- (+ 1 o.x)
+(define o (A :x true :y "hi"))
+o.x
+-- (A :x 1 :y "hi")
+-- (1 2)
 
 
--- (define f (fun ([x Any]) x))
--- (f "hi")
-
-(A :x 1 :y "hi")
+-- (define f (fun ([a (A :x Any :y String)] [-> a.x]) a.x))
+-- (f (A :x 1 :y "hi"))

@@ -21,18 +21,18 @@ public class RecordValue extends Value {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Constants.TUPLE_BEGIN);
+        sb.append(Constants.PAREN_BEGIN);
         sb.append(Constants.RECORD_KEYWORD).append(" ");
         sb.append(name == null ? "_" : name);
 
         for (String field : properties.keySet()) {
-            sb.append(" ").append(Constants.ARRAY_BEGIN);
+            sb.append(" ").append(Constants.SQUARE_BEGIN);
             sb.append(field).append(" ");
             sb.append(properties.lookupLocal(field));
-            sb.append(Constants.ARRAY_END);
+            sb.append(Constants.SQUARE_END);
         }
 
-        sb.append(Constants.TUPLE_END);
+        sb.append(Constants.PAREN_END);
         return sb.toString();
     }
 

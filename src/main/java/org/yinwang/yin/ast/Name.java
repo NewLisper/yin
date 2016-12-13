@@ -2,7 +2,7 @@ package org.yinwang.yin.ast;
 
 
 import org.yinwang.yin.Scope;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.Value;
 
 public class Name extends Node {
@@ -12,6 +12,14 @@ public class Name extends Node {
     public Name(String id, String file, int start, int end, int line, int col) {
         super(file, start, end, line, col);
         this.id = id;
+    }
+
+
+    /**
+     * Generate a name without location info
+     */
+    public static Name genName(String id) {
+        return new Name(id, null, 0, 0, 0, 0);
     }
 
 
@@ -26,7 +34,7 @@ public class Name extends Node {
         if (v != null) {
             return v;
         } else {
-            _.abort(this, "unbound variable: " + id);
+            Util.abort(this, "unbound variable: " + id);
             return Value.VOID;
         }
     }

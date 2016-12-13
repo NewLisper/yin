@@ -1,0 +1,13 @@
+--- functions may be called with either all positional arguments or all keyword
+--- arguments, but not a mixture. This provides convenience but avoids
+--- confusions.
+
+
+(define f
+  (fun (x y)
+    (- x y)))
+
+
+(f 3 2)                                 -- result: 1
+(f :x 3 :y 2)                           -- result: 1
+(f :y 3 :x 2)                           -- result: -1

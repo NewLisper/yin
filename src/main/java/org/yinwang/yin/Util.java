@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-public class _ {
+public class Util {
 
     @Nullable
     public static String readFile(@NotNull String path) {

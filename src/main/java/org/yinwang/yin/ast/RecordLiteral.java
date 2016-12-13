@@ -2,7 +2,7 @@ package org.yinwang.yin.ast;
 
 import org.yinwang.yin.Constants;
 import org.yinwang.yin.Scope;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.RecordType;
 import org.yinwang.yin.value.Value;
 
@@ -20,7 +20,7 @@ public class RecordLiteral extends Node {
         super(file, start, end, line, col);
 
         if (contents.size() % 2 != 0) {
-            _.abort(this, "record initializer must have even number of elements");
+            Util.abort(this, "record initializer must have even number of elements");
         }
 
         for (int i = 0; i < contents.size(); i += 2) {
@@ -28,12 +28,12 @@ public class RecordLiteral extends Node {
             Node value = contents.get(i + 1);
             if (key instanceof Keyword) {
                 if (value instanceof Keyword) {
-                    _.abort(value, "keywords shouldn't be used as values: " + value);
+                    Util.abort(value, "keywords shouldn't be used as values: " + value);
                 } else {
                     map.put(((Keyword) key).id, value);
                 }
             } else {
-                _.abort(key, "record initializer key is not a keyword: " + key);
+                Util.abort(key, "record initializer key is not a keyword: " + key);
             }
         }
     }
@@ -60,7 +60,7 @@ public class RecordLiteral extends Node {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Constants.RECORD_BEGIN);
+        sb.append(Constants.SQUARE_BEGIN);
         boolean first = true;
         for (Map.Entry<String, Node> e : map.entrySet()) {
             if (!first) {
@@ -69,7 +69,7 @@ public class RecordLiteral extends Node {
             sb.append(":" + e.getKey() + " " + e.getValue());
             first = false;
         }
-        sb.append(Constants.RECORD_END);
+        sb.append(Constants.SQUARE_END);
         return sb.toString();
     }
 }

@@ -1,0 +1,42 @@
+    public static Node groupAttr(Node prenode) throws ParserException {
+        if (prenode instanceof Tuple) {
+            Tuple t = (Tuple) prenode;
+            List<Node> elements = t.elements;
+            List<Node> newElems = new ArrayList<>();
+
+            if (elements.size() >= 1) {
+                Node grouped = elements.get(0);
+                if (delimType(grouped, Constants.ATTRIBUTE_ACCESS)) {
+                    throw new ParserException("illegal keyword: " + grouped.toString(), grouped);
+                }
+                grouped = groupAttr(grouped);
+
+                for (int i = 1; i < elements.size(); i++) {
+                    Node node1 = elements.get(i);
+                    if (delimType(node1, Constants.ATTRIBUTE_ACCESS)) {
+                        if (i + 1 >= elements.size()) {
+                            throw new ParserException("illegal position for .", node1);
+                        }
+                        Node node2 = elements.get(i + 1);
+                        if (delimType(node1, Constants.ATTRIBUTE_ACCESS)) {
+                            if (!(node2 instanceof Name)) {
+                                throw new ParserException("attribute is not a name: " + node2.toString(), node2);
+                            }
+                            grouped = new Attr(grouped, (Name) node2, grouped.file,
+                                    grouped.start, node2.end, grouped.line, grouped.col);
+                            i++;   // skip
+                        }
+                    } else {
+                        newElems.add(grouped);
+                        grouped = groupAttr(node1);
+                    }
+                }
+                newElems.add(grouped);
+            }
+            return new Tuple(newElems, t.open, t.close, t.file, t.start, t.end, t.line, t.col);
+        } else {
+            return prenode;
+        }
+    }
+
+

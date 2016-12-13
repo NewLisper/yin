@@ -17,7 +17,7 @@
        (unless (eq (cdr match) paren-face)
          (setq ,keywords (cons (cons regexp paren-face) ,keywords))))))
 
-(add-hook 'element-mode-hook           (paren-face-add-support element-font-lock-keywords))
+(add-hook 'yin-mode-hook              (paren-face-add-support yin-font-lock-keywords))
 (add-hook 'scheme-mode-hook           (paren-face-add-support scheme-font-lock-keywords-2))
 (add-hook 'lisp-mode-hook             (paren-face-add-support lisp-font-lock-keywords-2))
 (add-hook 'emacs-lisp-mode-hook       (paren-face-add-support lisp-font-lock-keywords-2))

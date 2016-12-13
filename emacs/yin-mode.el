@@ -1,3 +1,54 @@
+;; Instructions
+;; ============
+;; 1. copy yin-mode.el and parenface.el into .emacs.d
+;; 2. put the following lines into ~/.emacs file:
+;; 3. optional: download and install paredit-mode.el (recommended)
+
+;;; --------------------------------------------------------------------------
+;; (add-to-list 'load-path "~/.emacs.d")
+
+;; (require 'yin-mode)
+;; (add-to-list 'auto-mode-alist '("\\.yin$" . yin-mode))
+
+;; (add-hook 'yin-mode-hook
+;;   (lambda ()
+;;     (paredit-mode 1)
+;;     (paren-face-add-support yin-font-lock-keywords)
+;;     (set-face-foreground 'paren-face "DimGray")
+;;     (mapc (lambda (x) (put x 'yin-indent-function 1)) *binding-constructs*)
+
+;;     (defun paredit-insert-comment ()
+;;       (let ((code-after-p
+;;              (save-excursion (paredit-skip-whitespace t (point-at-eol))
+;;                              (not (eolp))))
+;;             (code-before-p
+;;              (save-excursion (paredit-skip-whitespace nil (point-at-bol))
+;;                              (not (bolp)))))
+;;         (cond ((and (bolp)
+;;                     (let ((indent
+;;                            (let ((indent (calculate-lisp-indent)))
+;;                              (if (consp indent) (car indent) indent))))
+;;                       (and indent (zerop indent))))
+;;                ;; Top-level comment
+;;                (if code-after-p (save-excursion (newline)))
+;;                (insert comment-start))
+;;               ((or code-after-p (not code-before-p))
+;;                ;; Code comment
+;;                (if code-before-p
+;;                    (newline-and-indent)
+;;                  (lisp-indent-line))
+;;                (insert comment-start)
+;;                (if code-after-p
+;;                    (save-excursion
+;;                      (newline)
+;;                      (lisp-indent-line)
+;;                      (paredit-indent-sexps))))
+;;               (t
+;;                ;; Margin comment
+;;                (indent-to comment-column 1) ; 1 -> force one leading space
+;;                (insert comment-start)))))))
+
+
 (defvar yin-mode-syntax-table
   (let ((st (make-syntax-table))
 	(i 0))

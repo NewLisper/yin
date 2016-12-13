@@ -1,7 +1,7 @@
 package org.yinwang.yin.value.primitives;
 
 
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.ast.Node;
 import org.yinwang.yin.value.*;
 
@@ -32,7 +32,7 @@ public class Add extends PrimFun {
             return new FloatValue(((IntValue) v1).value + ((FloatValue) v2).value);
         }
 
-        _.abort(location, "incorrect argument types for +: " + v1 + ", " + v2);
+        Util.abort(location, "incorrect argument types for +: " + v1 + ", " + v2);
         return null;
     }
 
@@ -47,7 +47,7 @@ public class Add extends PrimFun {
         if (v1 instanceof IntType && v2 instanceof IntType) {
             return Type.INT;
         }
-        _.abort(location, "incorrect argument types for +: " + v1 + ", " + v2);
+        Util.abort(location, "incorrect argument types for +: " + v1 + ", " + v2);
         return null;
     }
 

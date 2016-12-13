@@ -2,7 +2,7 @@ package org.yinwang.yin.ast;
 
 import org.yinwang.yin.Constants;
 import org.yinwang.yin.Scope;
-import org.yinwang.yin._;
+import org.yinwang.yin.Util;
 import org.yinwang.yin.value.RecordType;
 import org.yinwang.yin.value.Value;
 
@@ -50,7 +50,7 @@ public class RecordDef extends Node {
             for (Node p : parents) {
                 Value pv = p.typecheck(s);
                 if (!(pv instanceof RecordType)) {
-                    _.abort(p, "parent is not a record: " + pv);
+                    Util.abort(p, "parent is not a record: " + pv);
                     return null;
                 }
                 Scope parentProps = ((RecordType) pv).properties;
@@ -59,7 +59,7 @@ public class RecordDef extends Node {
                 for (String key : parentProps.keySet()) {
                     Value existing = properties.lookupLocalType(key);
                     if (existing != null) {
-                        _.abort(p, "conflicting field " + key +
+                        Util.abort(p, "conflicting field " + key +
                                 " inherited from parent " + p + ": " + pv);
                         return null;
                     }
@@ -78,22 +78,24 @@ public class RecordDef extends Node {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Constants.TUPLE_BEGIN);
+        sb.append(Constants.PAREN_BEGIN);
         sb.append(Constants.RECORD_KEYWORD).append(" ");
-        sb.append(name);
+        sb.append(name).append(" ");
 
         if (parents != null) {
             sb.append(" (" + Node.printList(parents) + ")");
         }
 
         for (String field : propertyForm.keySet()) {
+            sb.append("[" + field);
             Map<String, Object> props = propertyForm.lookupAllProps(field);
             for (Map.Entry<String, Object> e : props.entrySet()) {
                 sb.append(" :" + e.getKey() + " " + e.getValue());
             }
+            sb.append("]");
         }
 
-        sb.append(Constants.TUPLE_END);
+        sb.append(Constants.PAREN_END);
         return sb.toString();
     }
 }
